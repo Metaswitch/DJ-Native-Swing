@@ -215,15 +215,6 @@ public class SWTNativeInterface extends NativeInterface implements ISWTNativeInt
       if(nativeInterfaceConfiguration == null) {
         nativeInterfaceConfiguration = createConfiguration();
       }
-      NativeSwing.initialize();
-      Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-        public void eventDispatched(AWTEvent e) {
-          KeyEvent ke = (KeyEvent)e;
-          if(ke.getID() == KeyEvent.KEY_PRESSED && ke.getKeyCode() == KeyEvent.VK_F3 && ke.isControlDown() && ke.isAltDown() && ke.isShiftDown()) {
-            printStackTraces();
-          }
-        }
-      }, AWTEvent.KEY_EVENT_MASK);
       String inProcessProperty = NSSystemPropertySWT.INTERFACE_INPROCESS.get();
       if(inProcessProperty != null) {
         isInProcess = Boolean.parseBoolean(inProcessProperty);
@@ -242,6 +233,17 @@ public class SWTNativeInterface extends NativeInterface implements ISWTNativeInt
       } else {
         OutProcess.initialize();
       }
+	  
+      // Tweak AWT/Swing, after SWT has finished initializing or else there can be stability issues.
+      NativeSwing.initialize();
+      Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+        public void eventDispatched(AWTEvent e) {
+          KeyEvent ke = (KeyEvent)e;
+          if(ke.getID() == KeyEvent.KEY_PRESSED && ke.getKeyCode() == KeyEvent.VK_F3 && ke.isControlDown() && ke.isAltDown() && ke.isShiftDown()) {
+            printStackTraces();
+          }
+        }
+      }, AWTEvent.KEY_EVENT_MASK);
       isInitialized = true;
     }
   }

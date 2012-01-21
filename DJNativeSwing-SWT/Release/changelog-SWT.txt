@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 The DJ project - NativeSwing
 http://djproject.sourceforge.net
 Christopher Deckers (chrriis@nextencia.net)
@@ -8,6 +7,7 @@ Licence terms: LGPL (see licence.txt)
 
 * Version 1.0.2 (xxxxxxxxxxxxxx):
 
+- Native Swing is initialized after the SWT initialization to solve Mac issues.
 - Fixed a freeze when quitting the application on Mac by not adding the shutdown hook.
 - Attempt to call display.dispose() when closing the native interface.
 
