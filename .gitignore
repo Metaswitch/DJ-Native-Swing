@@ -1,0 +1,5 @@
+bin
+.gitignore
+*.zip
+*.jar
+*/documentation/javadoc
