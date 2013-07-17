@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 The DJ project - NativeSwing
 http://djproject.sourceforge.net
 Christopher Deckers (chrriis@nextencia.net)
