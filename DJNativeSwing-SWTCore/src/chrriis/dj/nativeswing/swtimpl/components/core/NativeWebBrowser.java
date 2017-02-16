@@ -46,9 +46,7 @@ import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.ole.win32.OLE;
-import org.eclipse.swt.ole.win32.OleAutomation;
-import org.eclipse.swt.ole.win32.Variant;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
@@ -1229,32 +1227,7 @@ class NativeWebBrowser extends SWTNativeComponent implements INativeWebBrowser {
     public Object run(Object[] args) {
       boolean isShowingDialog = (Boolean)args[0];
       Browser browser = (Browser)getControl();
-      if(Utils.IS_WINDOWS) {
-        try {
-          Class<?> ieClass = Class.forName("org.eclipse.swt.browser.IE");
-          Field webBrowserField = Browser.class.getDeclaredField("webBrowser");
-          webBrowserField.setAccessible(true);
-          Object swtWebBrowser = webBrowserField.get(browser);
-          if(ieClass.isInstance(swtWebBrowser)) {
-            Field autoField = ieClass.getDeclaredField("auto");
-            autoField.setAccessible(true);
-            OleAutomation swtBrowserAutomation = (org.eclipse.swt.ole.win32.OleAutomation)autoField.get(swtWebBrowser);
-            int[] rgdispid = swtBrowserAutomation.getIDsOfNames(new String[] { "ExecWB", "cmdID", "cmdexecopt" });
-            Variant[] rgvarg = new Variant[] {
-                new Variant(OLE.OLECMDID_PRINT),
-                new Variant(isShowingDialog? OLE.OLECMDEXECOPT_PROMPTUSER : OLE.OLECMDEXECOPT_DONTPROMPTUSER),
-            };
-            int[] rgdispidNamedArgs = new int[] {
-                rgdispid[1],
-                rgdispid[2],
-            };
-            /*Variant pVarResult =*/ swtBrowserAutomation.invoke(rgdispid[0], rgvarg, rgdispidNamedArgs);
-            // isn't there any possible error handling?
-            return true;
-          }
-        } catch (Throwable t) {
-        }
-      }
+
       if(!isShowingDialog) {
         return false;
       }
